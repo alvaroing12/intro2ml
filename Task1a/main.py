@@ -18,9 +18,10 @@ scores = np.zeros((10,len(lambda_ridge)))
 count = 0
 
 kf = KFold(n_splits=10)
-for train, test in kf.split(train_npX_pro):
+for train_index, test_index in kf.split(train_npX_pro):
     for l in range(len(lambda_ridge)):
-        scores[count,l] = buildmodel(train_npX_pro[train,1:],train_npX_pro[test,1:],train_npX_pro[train,0],train_npX_pro[test,0],lambda_ridge[l])
+    	print("TRAIN:", train_index, "TEST:", test_index)
+        scores[count,l] = buildmodel(train_npX_pro[train_index,1:],train_npX_pro[test_index,1:],train_npX_pro[train_index,0],train_npX_pro[test_index,0],lambda_ridge[l])
     count+= 1
 
 

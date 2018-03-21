@@ -18,7 +18,7 @@ def buildmodel(data,test,target_train,target_test,lambda_coeff):
 
     # Fit the model
 
-    ridgereg = Ridge(alpha=lambda_coeff, normalize=False,solver='sag')
+    ridgereg = Ridge(alpha=lambda_coeff, normalize=True, solver='auto')
     ridgereg.fit(data,target_train)
     y_pred = ridgereg.predict(test)
     rmse = sqrt(mean_squared_error(target_test, y_pred))
