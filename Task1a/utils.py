@@ -16,22 +16,18 @@ def parsedata(fileTrain):
 
     return ids, Y, X
 
-def buildmodel(train_data,test_data,target_train,target_test,lambda_coeff):
+def buildmodel(X_train,X_test,Y_train,Y_test,lambda_coeff):
 
     # Fit the model
 
-    ridgereg = Ridge(alpha=lambda_coeff, normalize=True, solver='sag')
-    ridgereg.fit(train_data,target_train)
-    y_pred = ridgereg.predict(test_data)
-    rmse = sqrt(mean_squared_error(target_test, y_pred))
+    A = np.dot(X_train.T, X_train)
+    B = lambda_coeff * np.identity(n = X_train.shape[1], dtype=np.float64)
+    inverse = np.linalg.pinv(A + B)
+    w_hat = np.dot(inverse , np.dot(X_train.T, Y_train))
+    Y_pred = np.dot(X_test, w_hat.T)
+    rmse = (mean_squared_error(Y_test, Y_pred))**0.5
 
     return rmse
-
-def preprocess(data):
-
-    res_scaled = preprocessing.scale(data)
-    return res_scaled
-
 
 def formoutput(arr):
 
