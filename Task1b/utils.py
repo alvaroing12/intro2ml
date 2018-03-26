@@ -43,6 +43,12 @@ def buildmodel(X_train,X_test,Y_train,Y_test,lambda_coeff):
 
     return rmse
 
+def build_baseline_v2(X_train, X_test, Y_train, Y_test):
+    w_hat = np.dot(np.linalg.pinv(np.dot(X_train.T, X_train)), np.dot(X_train.T, Y_train))
+    Y_pred = np.dot(X_test, w_hat.T)
+    rmse = (mean_squared_error(Y_test, Y_pred))**0.5
+    return w_hat, rmse
+
 def build_baseline(X,Y):
     w_hat = np.dot(np.linalg.pinv(np.dot(X.T, X)), np.dot(X.T, Y))
     Y_pred = np.dot(X, w_hat.T)
