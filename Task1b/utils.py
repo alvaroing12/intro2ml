@@ -5,7 +5,7 @@ TASK 1 B
 '''
 
 import pandas as pd
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import ElasticNet
 import numpy as np
 from sklearn.metrics import mean_squared_error
 from sklearn import preprocessing
@@ -30,7 +30,29 @@ def transform_features(X):
     const = np.ones(shape=(X.shape[0],1), dtype=np.float64)
     return np.concatenate((linear,quad,exp,cos,const), axis=1)
 
-def buildmodel(X_train,X_test,Y_train,Y_test,lambda_coeff):
+def build_baseline_v4(X_train,X_test,Y_train,Y_test,lambda_coeff):
+    elastic = ElasticNetCV(alpha=lambda_coeff, l1_ratio = 0.5, normalize=False, max_iter=1e5, fit_intercept=True)
+    elastic.fit(X_train,Y_train)
+    
+    
+    w_hat = elastic.coef_
+    Y_pred = elastic.predict(X_test)
+    rmse = (mean_squared_error(Y_test, Y_pred))**0.5
+    return w_hat, rmse
+
+def build_baseline_v5(X,Y):
+    regr = ElasticNet(alpha=0.28, l1_ratio=0.62, copy_X = True, normalize=True, max_iter=1e5, random_state=0, fit_intercept=False)
+    regr.fit(X,Y)
+    
+    alpha = 0
+    l1_ratio = 0
+    w_hat = regr.coef_
+
+    Y_pred = regr.predict(X)
+    rmse = (mean_squared_error(Y, Y_pred))**0.5
+    return w_hat, rmse, alpha, l1_ratio, regr
+
+def build_baseline_v3(X_train,X_test,Y_train,Y_test,lambda_coeff):
 
     # Fit the model
 
@@ -41,7 +63,7 @@ def buildmodel(X_train,X_test,Y_train,Y_test,lambda_coeff):
     Y_pred = np.dot(X_test, w_hat.T)
     rmse = (mean_squared_error(Y_test, Y_pred))**0.5
 
-    return rmse
+    return w_hat, rmse
 
 def build_baseline_v2(X_train, X_test, Y_train, Y_test):
     w_hat = np.dot(np.linalg.pinv(np.dot(X_train.T, X_train)), np.dot(X_train.T, Y_train))
