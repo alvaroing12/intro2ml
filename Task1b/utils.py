@@ -77,7 +77,7 @@ def build_baseline(X,Y):
     rmse = (mean_squared_error(Y, Y_pred))**0.5
     return w_hat, rmse    
 
-def formoutput(arr):
+def formoutput(arr, output_file):
 
-    output = pd.DataFrame({'w_hat': arr})
-    output.to_csv('output.csv', index=False, header=False)
+    output = pd.DataFrame(arr)
+    output.to_csv(output_file, index=False, header=False)
