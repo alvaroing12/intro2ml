@@ -70,7 +70,7 @@ valid_values = []
 train_complete_values = []
 valid_complete_values = []
 for i in alphas:
-	nn_clf = MLPClassifier(activation='logistic', solver='lbfgs', alpha=1, max_iter=625, warm_start=True, hidden_layer_sizes=(8,), random_state=45236)
+	nn_clf = MLPClassifier(activation='logistic', solver='lbfgs', alpha=1, max_iter=620, warm_start=True, hidden_layer_sizes=(8,), random_state=45236)
 	nn_clfs.append(nn_clf)
 
 
